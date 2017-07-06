@@ -43,7 +43,8 @@ namespace StateStreet.ConsoleApp
             Console.WriteLine("Please Enter your Email Id and Press Enter");
             string email = Console.ReadLine();
             Console.WriteLine("Please Enter your Password and Press Enter");
-            string password = Console.ReadLine();
+            string password = ReadPassword();
+            //string password = Console.ReadLine();
             var result = accountService.Login(email, password);
             if (result != null)
             {
@@ -59,13 +60,13 @@ namespace StateStreet.ConsoleApp
 
         public AccountModel WithDrawAmount(AccountModel model, string amount)
         {
-            decimal deductableAmount = 0;            
-            decimal.TryParse(amount, out deductableAmount);
+            decimal deductableAmount = 0;
+            Decimal.TryParse(amount, out deductableAmount);
             if (deductableAmount != 0 && deductableAmount < model.Balance)
             {
                 var result = accountService.WithDrawAmount(model, deductableAmount);
                 logger.Info("Amount withdrawn successfully");
-                Console.WriteLine("Transaction Successful. Current Balance in your account is " + result.Balance);                
+                Console.WriteLine("Transaction Successful. Current Balance in your account is " + result.Balance);
                 return result;
             }
             else
@@ -73,6 +74,34 @@ namespace StateStreet.ConsoleApp
                 Console.WriteLine("Press enter a number between 1 and " + model.Balance);
                 return model;
             }
+        }
+
+        public static string ReadPassword()
+        {
+            string password = "";
+            ConsoleKeyInfo info = Console.ReadKey(true);
+            while (info.Key != ConsoleKey.Enter)
+            {
+                if (info.Key != ConsoleKey.Backspace)
+                {
+                    Console.Write("*");
+                    password += info.KeyChar;
+                }
+                else if (info.Key == ConsoleKey.Backspace)
+                {
+                    if (!string.IsNullOrEmpty(password))
+                    {
+                        password = password.Substring(0, password.Length - 1);
+                        int pos = Console.CursorLeft;
+                        Console.SetCursorPosition(pos - 1, Console.CursorTop);
+                        Console.Write(" ");
+                        Console.SetCursorPosition(pos - 1, Console.CursorTop);
+                    }
+                }
+                info = Console.ReadKey(true);
+            }            
+            Console.WriteLine();
+            return password;
         }
     }
 }
