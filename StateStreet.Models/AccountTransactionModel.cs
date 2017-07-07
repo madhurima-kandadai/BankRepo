@@ -1,4 +1,6 @@
-﻿namespace StateStreet.Models
+﻿using System;
+
+namespace StateStreet.Models
 {
     public class AccountTransactionModel
     {
@@ -9,5 +11,6 @@
         public string TransactionType { get; set; }
 
         public decimal? Amount { get; set; }
+        public DateTime? TransactionTime { get; set; }
     }
 }

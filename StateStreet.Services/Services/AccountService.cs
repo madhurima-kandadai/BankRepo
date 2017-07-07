@@ -77,7 +77,8 @@ namespace StateStreet.Services.Services
                     {
                         AccountNumber = model.AccountNumber,
                         Amount = amount,
-                        TransactionType = "WithDraw"
+                        TransactionType = "WithDraw",
+                        TransactionTime = DateTime.Now
                     };
                     context.AccountTransactions.Add(transacion);
                     context.SaveChanges();
@@ -102,6 +103,21 @@ namespace StateStreet.Services.Services
                     throw;
                 }
             }
+        }
+
+        public List<AccountTransactionModel> GetAllTransactions(string accountNumber)
+        {
+            var query = (from transaction in context.AccountTransactions
+                where transaction.AccountNumber == accountNumber
+                select new AccountTransactionModel()
+                {
+                    Id = transaction.Id,
+                    AccountNumber = transaction.AccountNumber,
+                    TransactionTime = transaction.TransactionTime,
+                    TransactionType = transaction.TransactionType,
+                    Amount = transaction.Amount
+                }).ToList();
+            return query;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NLog;
 using StateStreet.Models;
 using StateStreet.Services.Services;
@@ -99,9 +100,31 @@ namespace StateStreet.ConsoleApp
                     }
                 }
                 info = Console.ReadKey(true);
-            }            
+            }
             Console.WriteLine();
             return password;
+        }
+
+        public void GetAllTransactions(string accountNumber)
+        {
+            var list = accountService.GetAllTransactions(accountNumber);
+            Console.WriteLine("==============================================================");
+            Console.WriteLine("Showing Transactions for the Account Number: " + accountNumber);
+            Console.WriteLine("==============================================================");
+            Console.WriteLine();
+            if (list.Count > 0)
+            {
+                Console.WriteLine("Type \t      Amount \t Time");
+                Console.WriteLine();
+                foreach (var item in list)
+                {
+                    Console.WriteLine(item.TransactionType + "\t" + item.Amount + "\t" + item.TransactionTime);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No transactions found");
+            }
         }
     }
 }

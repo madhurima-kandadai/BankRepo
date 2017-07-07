@@ -17,6 +17,7 @@ namespace StateStreet.ConsoleApp
         {
             logger.Info("Application Started");
             accountModelService = new AccountModelService();
+            //accountModelService.AddAccounts();
             Console.WriteLine("===============================");
             Console.WriteLine("Welcome to State Street");
             Console.WriteLine("===============================");
@@ -27,8 +28,9 @@ namespace StateStreet.ConsoleApp
         {
             Console.WriteLine("Press 1 TO Check Balance in your account");
             Console.WriteLine("Press 2 to withdraw money from your account");
-            Console.WriteLine("Press 3 to Logout");
-            Console.WriteLine("Press 4 to Logout and Exit");
+            Console.WriteLine("Press 3 to Get your transaction list");
+            Console.WriteLine("Press 4 to Logout");
+            Console.WriteLine("Press 5 to Logout and Exit");
             var key = Console.ReadLine();
             SelectOptions(key);
         }
@@ -41,7 +43,7 @@ namespace StateStreet.ConsoleApp
                 Console.WriteLine("Click Enter to login");
                 var key = Console.ReadLine();
                 if (string.IsNullOrEmpty(key))
-                {                    
+                {
                     model = accountModelService.Login();
                     if (model?.AccountNumber != null)
                     {
@@ -67,6 +69,7 @@ namespace StateStreet.ConsoleApp
 
         private static void SelectOptions(string option)
         {
+            Console.Clear();
             switch (option)
             {
                 case "1":
@@ -98,13 +101,26 @@ namespace StateStreet.ConsoleApp
                     }
                     break;
                 case "3":
-                    model = null;
+                    if (model != null)
+                    {
+                        logger.Info("Performing Get transactions Operation");
+                        accountModelService.GetAllTransactions(model.AccountNumber);
+                        Format();
+                        BankServices();
+                    }
+                    else
+                    {
+                        Login();
+                    }
+                    break;
+                case "4":
+                    model = null;                    
                     logger.Info("Performing Logout Operation");
                     Console.WriteLine("You are successfully logged out of the application");
                     Format();
                     Login();
                     break;
-                case "4":
+                case "5":
                     model = null;
                     Console.WriteLine("You are successfully logged out of the application");
                     Console.WriteLine("Closing the application now");

@@ -14,6 +14,8 @@ namespace StateStreet.Entities
         [StringLength(50)]
         public string AccountNumber { get; set; }
 
+        public DateTime? TransactionTime { get; set; }
+
         [StringLength(10)]
         public string TransactionType { get; set; }
 
